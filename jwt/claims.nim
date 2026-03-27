@@ -19,8 +19,8 @@ type
 
 proc newClaims*(
     claims: varargs[tuple[key: string, val: Claim]]
-): TableRef[string, Claim] =
-  result = newTable[string, Claim](claims)
+): OrderedTableRef[string, Claim] =
+  result = newOrderedTable[string, Claim](claims)
 
 proc newClaim*(k: ClaimKind, node: JsonNode): Claim =
   new result
@@ -109,7 +109,7 @@ proc newJTI*(j: JsonNode): Claim =
 proc newJTI*(s: string): Claim =
   return newJTI(%s)
 
-proc toClaims*(j: JsonNode): TableRef[string, Claim] =
+proc toClaims*(j: JsonNode): OrderedTableRef[string, Claim] =
   result = newClaims()
 
   for claimKey, claimNode in j:
@@ -134,11 +134,11 @@ proc toClaims*(j: JsonNode): TableRef[string, Claim] =
 proc `%`*(c: Claim): JsonNode =
   result = c.node
 
-proc `%`*(claims: TableRef[string, Claim]): JsonNode =
+proc `%`*(claims: OrderedTableRef[string, Claim]): JsonNode =
   result = newJObject()
   for k, v in claims:
     result[k] = %v
 
-proc toBase64*(claims: TableRef[string, Claim]): string =
+proc toBase64*(claims: OrderedTableRef[string, Claim]): string =
   let asJson = %claims
   result = encodeUrlSafe($asJson)
