@@ -1,33 +1,19 @@
 name: CI
-
 on:
   push:
-  schedule:
-    - cron: '0 0 * * *'
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
 
 jobs:
-  Test:
-    if: |
-      !contains(github.event.head_commit.message, '[skip ci]')
-    strategy:
-      fail-fast: false
-      matrix:
-        os:             [ubuntu-latest]
-        nim-channel:    [stable, devel]
-
-    name: ${{ matrix.os }}-${{ matrix.nim-channel }}
-    runs-on: ${{ matrix.os }}
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Setup nim
-      uses: jiro4989/setup-nim-action@v1
-      with:
-        nim-version: ${{ matrix.nim-channel }}
-
-    - name: Test
-      shell: bash
-      run: |
-        nim --version
-        nimble install -dy
+  build:
+    uses: status-im/nimbus-common-workflow/.github/workflows/common.yml@main
+    with:
+      nim-versions: '["version-2-0", "version-2-2", "devel"]'
+      # TODO: switch to "nimble install nimble" after nimble v1 release
+      nimble-version: 1b4deb9be9fca7b8a21576a6c0de85f1ae7c30de
+      test-command: |
+        nimble dump --solve
+        nimble list --installed --version
         nimble test
