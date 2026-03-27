@@ -18,7 +18,7 @@ proc invalidPemKey() =
 
 proc pemDecoderLoop(
     pem: string,
-    prc: proc(ctx: pointer, pbytes: pointer, nbytes: uint) {.bearSslFunc.},
+    prc: proc(ctx: pointer, pbytes: pointer, nbytes: csize_t) {.bearSslFunc.},
     ctx: pointer,
 ) =
   var pemCtx: PemDecoderContext
@@ -55,7 +55,7 @@ proc decodeFromPem(pkCtx: var PkeyDecoderContext, pem: string) =
   pkeyDecoderInit(addr pkCtx)
   pemDecoderLoop(
     pem,
-    cast[proc(ctx: pointer, pbytes: pointer, nbytes: uint) {.bearSslFunc.}](pkeyDecoderPush),
+    cast[proc(ctx: pointer, pbytes: pointer, nbytes: csize_t) {.bearSslFunc.}](pkeyDecoderPush),
     addr pkCtx,
   )
   if pkeyDecoderLastError(addr pkCtx) != 0:
