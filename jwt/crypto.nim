@@ -96,7 +96,7 @@ proc bearSignRSPem*(
 
 proc bearVerifyRSPem*(
     data, key: string,
-    sig: openarray[byte],
+    sig: openArray[byte],
     alg: ptr HashClass,
     hashOid: cstring,
     hashLen: int,
@@ -152,7 +152,7 @@ proc bearSignECPem*(data, key: string, alg: ptr HashClass): seq[byte] =
   result.setLen(sz)
 
 proc bearVerifyECPem*(
-    data, key: string, sig: openarray[byte], alg: ptr HashClass, hashLen: int
+    data, key: string, sig: openArray[byte], alg: ptr HashClass, hashLen: int
 ): bool =
   # Step 1. Extract EC Pub key from `key` in PEM format
   var pkCtx: PkeyDecoderContext
