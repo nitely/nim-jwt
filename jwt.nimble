@@ -7,7 +7,7 @@ license       = "MIT"
 # Deps
 requires "nim >= 1.6.0"
 requires "bearssl >= 0.2.7"
-requires "https://github.com/nitely/bearssl_pkey_decoder#ce622e83b1b4d5f53a6e7ca2af9111abb32c9b78"
+requires "https://github.com/vacp2p/bearssl_pkey_decoder#d34aa46bf9d0a3ffff810fbd3c4d2fa024eb9368"
 
 let nimc = getEnv("NIMC", "nim") # Which nim compiler to use
 let lang = getEnv("NIMLANG", "c") # Which backend (c/cpp/js)
