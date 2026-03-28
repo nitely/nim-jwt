@@ -1,5 +1,5 @@
 import json, unittest
-import jwt
+import ../jwt
 
 suite "Claim ops":
   test "Create claims from JSON":

@@ -1,6 +1,6 @@
 import json, strutils, tables, times
 import bearssl
-import jwt/[claims, jose, utils, crypto]
+import ./jwt/[claims, jose, utils, crypto]
 
 type
   InvalidToken* = object of ValueError
@@ -9,7 +9,7 @@ type
     headerB64: string
     claimsB64: string
     header*: JsonNode
-    claims*: TableRef[string, Claim]
+    claims*: OrderedTableRef[string, Claim]
     signature*: seq[byte]
 
 export claims
@@ -22,7 +22,7 @@ proc splitToken(s: string): seq[string] =
   result = parts
 
 proc initJWT*(
-    header: JsonNode, claims: TableRef[string, Claim], signature: seq[byte] = @[]
+    header: JsonNode, claims: OrderedTableRef[string, Claim], signature: seq[byte] = @[]
 ): JWT =
   JWT(
     headerB64: header.toBase64,

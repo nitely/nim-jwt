@@ -1,5 +1,5 @@
 import json, times, unittest
-import jwt
+import ../jwt
 
 proc getToken(claims: JsonNode = newJObject(), header: JsonNode = newJObject()): JWT =
   for k, v in %*{"alg": "HS512", "typ": "JWT"}:
@@ -10,7 +10,7 @@ proc getToken(claims: JsonNode = newJObject(), header: JsonNode = newJObject()):
 
 proc tokenWithAlg(alg: string): JWT =
   let header = %*{"typ": "JWT", "alg": alg}
-  let claims = %*{"sub": "1234567890", "name": "John Doe", "iat": 1516239022}
+  let claims = %*{"name": "John Doe", "sub": "1234567890", "iat": 1516239022}
   initJWT(header.toHeader, claims.toClaims)
 
 proc signedHSToken(alg: string): JWT =

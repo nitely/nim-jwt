@@ -18,7 +18,7 @@ proc invalidPemKey() =
 
 proc pemDecoderLoop(
     pem: string,
-    prc: proc(ctx: pointer, pbytes: pointer, nbytes: uint) {.bearSslFunc.},
+    prc: proc(ctx: pointer, pbytes: pointer, nbytes: csize_t) {.bearSslFunc.},
     ctx: pointer,
 ) =
   var pemCtx: PemDecoderContext
@@ -55,7 +55,7 @@ proc decodeFromPem(pkCtx: var PkeyDecoderContext, pem: string) =
   pkeyDecoderInit(addr pkCtx)
   pemDecoderLoop(
     pem,
-    cast[proc(ctx: pointer, pbytes: pointer, nbytes: uint) {.bearSslFunc.}](pkeyDecoderPush),
+    cast[proc(ctx: pointer, pbytes: pointer, nbytes: csize_t) {.bearSslFunc.}](pkeyDecoderPush),
     addr pkCtx,
   )
   if pkeyDecoderLastError(addr pkCtx) != 0:
@@ -96,7 +96,7 @@ proc bearSignRSPem*(
 
 proc bearVerifyRSPem*(
     data, key: string,
-    sig: openarray[byte],
+    sig: openArray[byte],
     alg: ptr HashClass,
     hashOid: cstring,
     hashLen: int,
@@ -152,7 +152,7 @@ proc bearSignECPem*(data, key: string, alg: ptr HashClass): seq[byte] =
   result.setLen(sz)
 
 proc bearVerifyECPem*(
-    data, key: string, sig: openarray[byte], alg: ptr HashClass, hashLen: int
+    data, key: string, sig: openArray[byte], alg: ptr HashClass, hashLen: int
 ): bool =
   # Step 1. Extract EC Pub key from `key` in PEM format
   var pkCtx: PkeyDecoderContext
