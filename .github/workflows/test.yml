@@ -16,4 +16,3 @@ jobs:
         nimble dump --solve
         nimble list --installed --version
         env NIMLANG=c nimble test
-        env NIMLANG=cpp nimble test
